@@ -1,0 +1,10 @@
+/pingpong_tester_node:
+  ros__parameters:
+    offset: 1.0
+    switch_period: 1.0
+
+/gun_controller_node:
+  ros__parameters:
+    duty_accel: 2.5
+    duty_deccel: 2.5
+
