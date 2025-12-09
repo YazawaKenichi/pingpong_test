@@ -10,5 +10,5 @@ ros2 launch pingpong_tester test.launch.py
 ```
 
 # パラメータの編集
-[test.param.yaml](https://github.com/yazawakenichi/pingpong_tester/tree/main/config/test.param.yaml)
+[test.param.yaml](https://github.com/yazawakenichi/pingpong_tester/blob/main/config/test.param.yaml)
 
