@@ -6,6 +6,8 @@
 #include <lifecycle_msgs/msg/transition.hpp>
 
 #include <std_msgs/msg/float32_multi_array.hpp>
+#include <std_msgs/msg/float32.hpp>
+#include <geometry_msgs/msg/vector3.h>
 
 namespace GunControllerTesters
 {
@@ -24,7 +26,10 @@ rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn GunCon
     this->switch_period_ = this->get_parameter("switch_period").as_double();
     RCLCPP_INFO(get_logger(), "Parameters: {offset: %f, switch_period: %f", this->offset_, this->switch_period_);
 
-    this->duty_velocity_publisher_ = this->create_publisher<std_msgs::msg::Float32MultiArray>("/pico/gun/velocity", 10);
+    this->velocity_publisher_ = this->create_publisher<std_msgs::msg::Float32MultiArray>("/pico/gun/velocity", 10);
+    this->pose_publisher_ = this->create_publisher<geometry_msgs::msg::Vector3>("/pico/pose", 10);
+    this->loading_publisher_ = this->create_publisher<std_msgs::msg::Float32>("/pico/loading/deg", 10);
+    this->position_publisher_ = this->create_publisher<std_msgs::msg::Float32>("/pico/stepper/position/raw", 10);
 
     return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
 }
@@ -56,11 +61,42 @@ rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn GunCon
 
 void GunControllerTester::set_velocity(float p, float d)
 {
-    RCLCPP_INFO(get_logger(), "Publish: %f, %f", p, d);
+    RCLCPP_INFO(get_logger(), "Publish velocity: %f, %f", p, d);
 
     std_msgs::msg::Float32MultiArray msg;
     msg.data = {p, d};
-    this->duty_velocity_publisher_->publish(msg);
+    this->velocity_publisher_->publish(msg);
+}
+
+void GunControllerTester::set_pose(float r, float p, float y)
+{
+    RCLCPP_INFO(get_logger(), "Publish pose: %f, %f, %f", r, p, y);
+
+    geometry_msgs::msg::Vector3 msg;
+    msg.x = r;
+    msg.p = p;
+    msg.y = y;
+    this->pose_publisher_->publish(msg);
+}
+
+void GunControllerTester::set_loading(bool tf)
+{
+    deg = tf ? 10 : 130;
+
+    RCLCPP_INFO(get_logger(), "Publish loading: %f", deg);
+
+    std_msgs::msg::Float32 msg;
+    msg.data = deg;
+    this->loading_publisher_->publish(msg);
+}
+
+void GunControllerTester::set_position(float p)
+{
+    RCLCPP_INFO(get_logger(), "Publish position: %f", p);
+
+    std_msgs::msg::Float32 msg;
+    msg.data = p;
+    this->position_publisher_->publish(msg);
 }
 
 void GunControllerTester::behavior_pattern()
@@ -95,7 +131,7 @@ void GunControllerTester::timer_callback()
 {
     this->time_ = this->time_ + TIMER_PERIOD_MS;
     // this->behavior_pattern();
-    this->behavior_hard();
+    // this->behavior_hard();
 }
 }
 
