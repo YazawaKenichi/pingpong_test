@@ -7,6 +7,8 @@
 #include <lifecycle_msgs/msg/transition.hpp>
 
 #include <std_msgs/msg/float32_multi_array.hpp>
+#include <std_msgs/msg/float32.hpp>
+#include <geometry_msgs/msg/vector3.hpp>
 
 #define DT 2
 #define TIMER_PERIOD_MS 1
@@ -32,10 +34,16 @@ class GunControllerTester : public rclcpp_lifecycle::LifecycleNode
     private:
         void timer_callback();
         void set_velocity(float, float);
+        void set_pose(float, float, float);
+        void set_loading(bool);
+        void set_position(float);
         void behavior_pattern();
         void behavior_hard();
 
-        rclcpp::Publisher<std_msgs::msg::Float32MultiArray>::SharedPtr duty_velocity_publisher_;
+        rclcpp::Publisher<std_msgs::msg::Float32MultiArray>::SharedPtr velocity_publisher_;
+        rclcpp::Publisher<geometry_msgs::msg::Vector3>::SharedPtr pose_publisher_;
+        rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr loading_publisher_;
+        rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr position_publisher_;
         rclcpp::TimerBase::SharedPtr timer_;
 
         unsigned int time_;

@@ -15,6 +15,7 @@
   <depend>rclcpp</depend>
   <depend>rclcpp_lifecycle</depend>
   <depend>std_msgs</depend>
+  <depend>geometry_msgs</depend>
 
   <exec_depend>ros2launch</exec_depend>
   <exec_depend>pingpong_gunner</exec_depend>

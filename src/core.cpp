@@ -7,7 +7,7 @@
 
 #include <std_msgs/msg/float32_multi_array.hpp>
 #include <std_msgs/msg/float32.hpp>
-#include <geometry_msgs/msg/vector3.h>
+#include <geometry_msgs/msg/vector3.hpp>
 
 namespace GunControllerTesters
 {
@@ -74,14 +74,14 @@ void GunControllerTester::set_pose(float r, float p, float y)
 
     geometry_msgs::msg::Vector3 msg;
     msg.x = r;
-    msg.p = p;
-    msg.y = y;
+    msg.y = p;
+    msg.z = y;
     this->pose_publisher_->publish(msg);
 }
 
 void GunControllerTester::set_loading(bool tf)
 {
-    deg = tf ? 10 : 130;
+    float deg = tf ? 10 : 130;
 
     RCLCPP_INFO(get_logger(), "Publish loading: %f", deg);
 
